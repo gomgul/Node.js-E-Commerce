@@ -1,15 +1,26 @@
-const contentDisposition = require("content-disposition");
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const userRoute = require("./routes/user");
+const authRoute = require("./routes/auth");
+
+
+dotenv.config();
+
 
 mongoose.connect(
-    "mongodb://localhost:5000/test"
+    process.env.MONGO_URL
 )
-.then( () => console.log("DBConnection Successfull!"))
+.then( () => console.log("DBConnection Successfull! 🤩"))
 .catch( (err) => { 
     console.log(err);    
 })
+
+app.use(express.json());
+app.use("/api/auth", authRoute );
+app.use("/api/users", userRoute );
 
 
 app.listen(5000, () => {
